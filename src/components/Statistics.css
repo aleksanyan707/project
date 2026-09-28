@@ -1,0 +1,90 @@
+.statistics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.statistic-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 110px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.statistic-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.statistic-card__icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 45px;
+  height: 45px;
+  place-items: center;
+  border-radius: 13px;
+}
+
+.statistic-card strong {
+  display: block;
+  color: #111827;
+  font-size: 26px;
+}
+
+.statistic-card p {
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.statistic-card--total .statistic-card__icon {
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.statistic-card--pending .statistic-card__icon {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.statistic-card--interview .statistic-card__icon {
+  color: #2563eb;
+  background: #dbeafe;
+}
+
+.statistic-card--accepted .statistic-card__icon {
+  color: #16a34a;
+  background: #dcfce7;
+}
+
+.statistic-card--rejected .statistic-card__icon {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+@media (max-width: 1200px) {
+  .statistics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .statistics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 500px) {
+  .statistics {
+    grid-template-columns: 1fr;
+  }
+}

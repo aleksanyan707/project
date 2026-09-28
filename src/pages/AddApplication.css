@@ -1,0 +1,33 @@
+.add-application {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.add-application__header {
+  margin-bottom: 28px;
+}
+
+.add-application__header p {
+  margin-bottom: 7px;
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.add-application__header h1 {
+  margin-bottom: 7px;
+  color: #111827;
+  font-size: 32px;
+}
+
+.add-application__header span {
+  color: #64748b;
+}
+
+@media (max-width: 600px) {
+  .add-application__header h1 {
+    font-size: 27px;
+  }
+}

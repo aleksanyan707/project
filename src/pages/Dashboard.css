@@ -1,0 +1,78 @@
+.dashboard {
+  width: 100%;
+}
+
+.dashboard-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 35px;
+  margin-bottom: 24px;
+  padding: 30px;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(196, 181, 253, 0.3),
+      transparent 30%
+    ),
+    linear-gradient(135deg, #302c36, #6d4b8b);
+  box-shadow: 0 16px 40px rgba(66, 45, 87, 0.22);
+}
+
+.dashboard-hero__label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 12px;
+  color: #ddd6fe;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.dashboard-hero h1 {
+  max-width: 600px;
+  font-size: clamp(27px, 4vw, 42px);
+  line-height: 1.15;
+}
+
+.dashboard-hero p {
+  max-width: 570px;
+  margin-top: 12px;
+  color: #d6cedd;
+  line-height: 1.6;
+}
+
+.dashboard-hero__button {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  color: #372547;
+  font-weight: 700;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(23, 15, 31, 0.2);
+  transition: transform 0.2s;
+}
+
+.dashboard-hero__button:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 720px) {
+  .dashboard-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .dashboard-hero__button {
+    justify-content: center;
+    width: 100%;
+  }
+}
