@@ -1,46 +1,40 @@
-import { nanoid } from "nanoid";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import ApplicationForm, {
-  emptyApplication,
-} from "../components/ApplicationForm";
+import ApplicationForm from "../components/ApplicationForm/ApplicationForm";
+import { createApplication } from "../store/applicationActions";
 
 import "./AddApplication.css";
 
-const AddApplication = ({ dispatch }) => {
+const AddApplication = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = (values) => {
-    const newApplication = {
-      ...values,
-      id: nanoid(),
-      salaryExpectation: Number(values.salaryExpectation),
-      experience: Number(values.experience),
-      status: "pending",
-      appliedDate: new Date().toISOString(),
-    };
+  const { saving, error } = useSelector((state) => state.applications);
 
-    dispatch({
-      type: "ADD_APPLICATION",
-      payload: newApplication,
-    });
+  const handleSubmit = async (formData) => {
+    try {
+      await dispatch(createApplication(formData));
 
-    navigate("/");
+      navigate("/");
+    } catch (error) {
+      console.error("Application was not created:", error);
+    }
   };
 
   return (
-    <section className="add-application">
-      <header className="add-application__header">
-        <p>NEW OPPORTUNITY</p>
-        <h1>Add Application</h1>
-        <span>Enter the information about your job application</span>
-      </header>
+    <section className="add-page">
+      <div className="add-heading">
+        <p className="page-label">New opportunity</p>
 
-      <ApplicationForm
-        initialValues={emptyApplication}
-        onSubmit={handleSubmit}
-        submitText="Add Application"
-      />
+        <h1>Add application</h1>
+
+        <p>Add information about the position and track your progress.</p>
+      </div>
+
+      {error && <p className="form-error">{error}</p>}
+
+      <ApplicationForm onSubmit={handleSubmit} loading={saving} />
     </section>
   );
 };

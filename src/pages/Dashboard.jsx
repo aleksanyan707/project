@@ -1,116 +1,243 @@
-import { useMemo, useState } from "react";
-import { Plus, Sparkles } from "lucide-react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import ApplicationDetailsModal from "../components/ApplicationDetailsModal";
-import DeleteModal from "../components/DeleteModal";
-import FilterBar from "../components/FilterBar";
-import KanbanBoard from "../components/KanbanBoard";
-import Statistics from "../components/Statistics";
+import {
+  BriefcaseBusiness,
+  Clock3,
+  CalendarDays,
+  CheckCircle2,
+  XCircle,
+  Building2,
+  MapPin,
+  Plus,
+} from "lucide-react";
+
+import { fetchApplications } from "../store/applicationActions";
 
 import "./Dashboard.css";
 
-const Dashboard = ({ applications, dispatch }) => {
-  const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+const Dashboard = () => {
+  const dispatch = useDispatch();
 
-  const [selectedApplication, setSelectedApplication] = useState(null);
+  const {
+    items = [],
+    loading,
+    error,
+  } = useSelector((state) => state.applications);
 
-  const [applicationToDelete, setApplicationToDelete] = useState(null);
+  useEffect(() => {
+    dispatch(fetchApplications());
+  }, [dispatch]);
 
-  const visibleApplications = useMemo(() => {
-    const searchText = search.trim().toLowerCase();
+  const applications = Array.isArray(items) ? items : [];
 
-    const filteredApplications = applications.filter(
-      (application) =>
-        application.fullName.toLowerCase().includes(searchText) ||
-        application.position.toLowerCase().includes(searchText) ||
-        application.company.toLowerCase().includes(searchText),
+  const pendingCount = applications.filter(
+    (application) => application.status?.toLowerCase() === "pending",
+  ).length;
+
+  const interviewCount = applications.filter(
+    (application) => application.status?.toLowerCase() === "interview",
+  ).length;
+
+  const acceptedCount = applications.filter(
+    (application) => application.status?.toLowerCase() === "accepted",
+  ).length;
+
+  const rejectedCount = applications.filter(
+    (application) => application.status?.toLowerCase() === "rejected",
+  ).length;
+
+  if (loading) {
+    return (
+      <main className="dashboard-page">
+        <div className="dashboard-message">
+          <div className="loading-circle"></div>
+          <p>Loading applications...</p>
+        </div>
+      </main>
     );
+  }
 
-    return [...filteredApplications].sort((first, second) => {
-      if (sortBy === "oldest") {
-        return new Date(first.appliedDate) - new Date(second.appliedDate);
-      }
+  if (error) {
+    return (
+      <main className="dashboard-page">
+        <div className="dashboard-message error">
+          <h2>Something went wrong</h2>
+          <p>{error}</p>
 
-      if (sortBy === "salary-high") {
-        return second.salaryExpectation - first.salaryExpectation;
-      }
-
-      if (sortBy === "salary-low") {
-        return first.salaryExpectation - second.salaryExpectation;
-      }
-
-      return new Date(second.appliedDate) - new Date(first.appliedDate);
-    });
-  }, [applications, search, sortBy]);
-
-  const handleDelete = () => {
-    dispatch({
-      type: "DELETE_APPLICATION",
-      payload: applicationToDelete.id,
-    });
-
-    setApplicationToDelete(null);
-  };
+          <button type="button" onClick={() => dispatch(fetchApplications())}>
+            Try again
+          </button>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <div className="dashboard">
+    <main className="dashboard-page">
       <section className="dashboard-hero">
         <div>
-          <div className="dashboard-hero__label">
-            <Sparkles size={15} />
-            CAREER PIPELINE
-          </div>
+          <p className="page-label">Application manager</p>
 
-          <h1>Organize your next big opportunity.</h1>
+          <h1>Dashboard</h1>
 
-          <p>
-            Follow every application from the first click to the final decision.
+          <p className="dashboard-description">
+            Track your applications and manage your career opportunities in one
+            place.
           </p>
         </div>
 
-        <Link className="dashboard-hero__button" to="/add">
+        <Link to="/add" className="add-button">
           <Plus size={19} />
-          New Application
+          Add application
         </Link>
       </section>
 
-      <Statistics applications={applications} />
+      <section className="statistics-grid">
+        <article className="statistic-card total">
+          <div className="statistic-icon">
+            <BriefcaseBusiness size={23} />
+          </div>
 
-      <FilterBar
-        search={search}
-        setSearch={setSearch}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-      />
+          <div>
+            <span>Total</span>
+            <strong>{applications.length}</strong>
+          </div>
+        </article>
 
-      <KanbanBoard
-        applications={visibleApplications}
-        dispatch={dispatch}
-        activeStatus={statusFilter}
-        onView={setSelectedApplication}
-        onDelete={setApplicationToDelete}
-      />
+        <article className="statistic-card pending">
+          <div className="statistic-icon">
+            <Clock3 size={23} />
+          </div>
 
-      {selectedApplication && (
-        <ApplicationDetailsModal
-          application={selectedApplication}
-          onClose={() => setSelectedApplication(null)}
-        />
-      )}
+          <div>
+            <span>Pending</span>
+            <strong>{pendingCount}</strong>
+          </div>
+        </article>
 
-      {applicationToDelete && (
-        <DeleteModal
-          application={applicationToDelete}
-          onCancel={() => setApplicationToDelete(null)}
-          onConfirm={handleDelete}
-        />
-      )}
-    </div>
+        <article className="statistic-card interview">
+          <div className="statistic-icon">
+            <CalendarDays size={23} />
+          </div>
+
+          <div>
+            <span>Interview</span>
+            <strong>{interviewCount}</strong>
+          </div>
+        </article>
+
+        <article className="statistic-card accepted">
+          <div className="statistic-icon">
+            <CheckCircle2 size={23} />
+          </div>
+
+          <div>
+            <span>Accepted</span>
+            <strong>{acceptedCount}</strong>
+          </div>
+        </article>
+
+        <article className="statistic-card rejected">
+          <div className="statistic-icon">
+            <XCircle size={23} />
+          </div>
+
+          <div>
+            <span>Rejected</span>
+            <strong>{rejectedCount}</strong>
+          </div>
+        </article>
+      </section>
+
+      <section className="applications-section">
+        <div className="section-heading">
+          <div>
+            <p className="page-label">Your progress</p>
+            <h2>Applications</h2>
+          </div>
+
+          <span className="application-count">{applications.length} total</span>
+        </div>
+
+        {applications.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-icon">
+              <BriefcaseBusiness size={30} />
+            </div>
+
+            <h3>No applications yet</h3>
+
+            <p>
+              Add your first job application to start tracking your progress.
+            </p>
+
+            <Link to="/add" className="empty-button">
+              <Plus size={18} />
+              Add first application
+            </Link>
+          </div>
+        ) : (
+          <div className="applications-list">
+            {applications.map((application) => {
+              const status = application.status?.toLowerCase() || "pending";
+
+              return (
+                <article className="application-card" key={application.id}>
+                  <div className="company-icon">
+                    <Building2 size={25} />
+                  </div>
+
+                  <div className="application-information">
+                    <div className="application-title">
+                      <div>
+                        <h3>{application.position || "Unknown position"}</h3>
+
+                        <p>{application.company || "Unknown company"}</p>
+                      </div>
+
+                      <span className={`status-badge ${status}`}>{status}</span>
+                    </div>
+
+                    <div className="application-details">
+                      {application.location && (
+                        <span>
+                          <MapPin size={16} />
+                          {application.location}
+                        </span>
+                      )}
+
+                      {application.appliedDate && (
+                        <span>
+                          <CalendarDays size={16} />
+                          {application.appliedDate}
+                        </span>
+                      )}
+
+                      {application.salaryExpectation && (
+                        <span>
+                          Expected salary: ${application.salaryExpectation}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="application-actions">
+                    <Link
+                      to={`/edit/${application.id}`}
+                      className="edit-button"
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    </main>
   );
 };
 

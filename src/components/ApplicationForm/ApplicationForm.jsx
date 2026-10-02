@@ -1,5 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
+
 import { useEffect, useRef } from "react";
+
 import * as Yup from "yup";
 
 import "./ApplicationForm.css";
@@ -25,7 +27,7 @@ const validationSchema = Yup.object({
     .email("Enter a valid email")
     .required("Email is required"),
 
-  phone: Yup.string().trim().required("Phone number is required"),
+  phone: Yup.string().trim().required("Phone is required"),
 
   position: Yup.string().trim().required("Position is required"),
 
@@ -51,19 +53,21 @@ const validationSchema = Yup.object({
   coverLetter: Yup.string()
     .trim()
     .min(50, "Cover letter must contain at least 50 characters")
-    .max(500, "Maximum 500 characters")
+    .max(500, "Cover letter cannot exceed 500 characters")
     .required("Cover letter is required"),
 });
 
 const ApplicationForm = ({
   initialValues = emptyApplication,
   onSubmit,
+  onCancel,
   submitText = "Save Application",
+  saving = false,
 }) => {
-  const fullNameRef = useRef(null);
+  const firstInputRef = useRef(null);
 
   useEffect(() => {
-    fullNameRef.current?.focus();
+    firstInputRef.current?.focus();
   }, []);
 
   return (
@@ -75,7 +79,7 @@ const ApplicationForm = ({
     >
       {({ values, isSubmitting }) => (
         <Form className="application-form">
-          <div className="application-form__grid">
+          <div className="form-grid">
             <div className="form-field">
               <label htmlFor="fullName">Full Name *</label>
 
@@ -83,13 +87,13 @@ const ApplicationForm = ({
                 id="fullName"
                 name="fullName"
                 placeholder="John Doe"
-                innerRef={fullNameRef}
+                innerRef={firstInputRef}
               />
 
               <ErrorMessage
                 name="fullName"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -106,7 +110,7 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="email"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -118,7 +122,7 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="phone"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -134,7 +138,7 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="position"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -146,7 +150,7 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="company"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -162,7 +166,7 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="location"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
@@ -180,12 +184,12 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="salaryExpectation"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
             <div className="form-field">
-              <label htmlFor="experience">Experience (years) *</label>
+              <label htmlFor="experience">Experience *</label>
 
               <Field
                 id="experience"
@@ -198,11 +202,11 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="experience"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
-            <div className="form-field application-form__full-width">
+            <div className="form-field full-width">
               <label htmlFor="cvUrl">CV URL *</label>
 
               <Field
@@ -215,12 +219,12 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="cvUrl"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
 
-            <div className="form-field application-form__full-width">
-              <div className="form-field__heading">
+            <div className="form-field full-width">
+              <div className="field-heading">
                 <label htmlFor="coverLetter">Cover Letter *</label>
 
                 <span>{values.coverLetter.length}/500</span>
@@ -238,18 +242,24 @@ const ApplicationForm = ({
               <ErrorMessage
                 name="coverLetter"
                 component="small"
-                className="form-field__error"
+                className="form-error"
               />
             </div>
           </div>
 
-          <button
-            className="application-form__submit"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Saving..." : submitText}
-          </button>
+          <div className="form-actions">
+            <button className="cancel-button" type="button" onClick={onCancel}>
+              Cancel
+            </button>
+
+            <button
+              className="submit-button"
+              type="submit"
+              disabled={saving || isSubmitting}
+            >
+              {saving || isSubmitting ? "Saving..." : submitText}
+            </button>
+          </div>
         </Form>
       )}
     </Formik>

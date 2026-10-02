@@ -1,30 +1,29 @@
 import { BriefcaseBusiness, LayoutDashboard, Plus } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
+
 import "./Header.css";
 
 const Header = () => {
   return (
     <header className="main-header">
-      <div className="main-header__container">
-        <NavLink className="main-header__brand" to="/">
-          <div className="main-header__logo">
+      <div className="header-container">
+        <NavLink className="brand-link" to="/">
+          <div className="brand-icon">
             <BriefcaseBusiness size={23} />
           </div>
 
-          <div>
+          <div className="brand-text">
             <h2>NextStep</h2>
-            <span>Job application workspace</span>
+            <span>Application workspace</span>
           </div>
         </NavLink>
 
-        <nav className="main-header__navigation">
+        <nav className="main-navigation">
           <NavLink
             to="/"
             end
-            className={({ isActive }) =>
-              `main-header__link ${isActive ? "main-header__link--active" : ""}`
-            }
+            className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           >
             <LayoutDashboard size={18} />
             Dashboard
@@ -32,12 +31,10 @@ const Header = () => {
 
           <NavLink
             to="/add"
-            className={({ isActive }) =>
-              `main-header__link ${isActive ? "main-header__link--active" : ""}`
-            }
+            className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
           >
             <Plus size={18} />
-            New Application
+            Add Application
           </NavLink>
         </nav>
       </div>

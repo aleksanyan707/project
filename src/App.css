@@ -12,15 +12,12 @@ html {
 body {
   min-width: 320px;
   min-height: 100vh;
-  font-family: Arial, sans-serif;
-  color: #f4f1f8;
-  background: #151319;
+  color: black;
+  background: white;
 }
 
 button,
-input,
-textarea,
-select {
+input {
   font: inherit;
 }
 

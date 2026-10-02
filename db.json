@@ -1,0 +1,18 @@
+{
+  "applications": [
+    {
+      "fullName": "alexik",
+      "email": "aleksanyanmark777@gmail.com",
+      "phone": "90909099090",
+      "position": "rgerg",
+      "company": "gagoyyy",
+      "salaryExpectation": 150,
+      "experience": 0,
+      "location": "yvn",
+      "cvUrl": "https://github.com/aleksanyan707/project",
+      "coverLetter": "dkjbirjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "id": "ZPFuQwv6-Qg"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

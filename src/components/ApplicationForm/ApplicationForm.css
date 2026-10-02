@@ -1,0 +1,132 @@
+.application-form {
+  padding: 28px;
+  border: 1px solid rgba(90, 76, 104, 0.17);
+  border-radius: 21px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 14px 40px rgba(53, 41, 64, 0.1);
+  backdrop-filter: blur(15px);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 21px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field label {
+  color: #3c3344;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  color: #29222f;
+  border: 1px solid #d8d1df;
+  border-radius: 11px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.76);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
+}
+
+.form-field textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: #7c3aed;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #a59cab;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field-heading span {
+  color: #8e8495;
+  font-size: 12px;
+}
+
+.form-error {
+  color: #dc2626;
+  font-size: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 11px;
+  margin-top: 28px;
+}
+
+.form-actions button {
+  min-width: 150px;
+  padding: 13px 18px;
+  font-weight: 700;
+  border-radius: 11px;
+}
+
+.cancel-button {
+  color: #554b5c;
+  border: 1px solid #d8d1df;
+  background: #ffffff;
+}
+
+.submit-button {
+  color: #ffffff;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #716779, #7c3aed);
+  box-shadow: 0 8px 22px rgba(109, 40, 217, 0.24);
+}
+
+.submit-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+@media (max-width: 700px) {
+  .application-form {
+    padding: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
