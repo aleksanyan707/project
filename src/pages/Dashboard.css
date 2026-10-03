@@ -1,14 +1,11 @@
 .dashboard-page {
+  width: 100%;
   min-height: 100vh;
+  margin: 0;
   padding: 35px 6%;
   background: linear-gradient(135deg, #18171f, #292237);
   color: #f5f3ff;
   font-family: "Segoe UI", sans-serif;
-}
-
-.dashboard-page,
-.dashboard-page * {
-  box-sizing: border-box;
 }
 
 .dashboard-page h1,
@@ -41,7 +38,7 @@
   font-size: 38px;
 }
 
-.page-label {
+.dashboard-page .page-label {
   color: #bca4ff;
   font-size: 12px;
   text-transform: uppercase;
@@ -105,6 +102,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .statistic-icon,
@@ -131,6 +129,7 @@
 
 .section-heading {
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .application-count,
@@ -171,6 +170,10 @@
   font-size: 12px;
 }
 
+.application-details svg {
+  flex-shrink: 0;
+}
+
 .status-badge {
   text-transform: capitalize;
 }
@@ -179,17 +182,46 @@
   color: #fcd34d;
   background: #fcd34d14;
 }
+
 .status-badge.interview {
   color: #93c5fd;
   background: #93c5fd14;
 }
+
 .status-badge.accepted {
   color: #6ee7b7;
   background: #6ee7b714;
 }
+
 .status-badge.rejected {
   color: #fda4af;
   background: #fda4af14;
+}
+
+.application-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.dashboard-page .delete-button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: #fb71851a;
+  color: #fda4af;
+  font: inherit;
+  cursor: pointer;
+}
+
+.delete-button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.dashboard-page .delete-error {
+  margin-bottom: 16px;
+  color: #fda4af;
 }
 
 .empty-state,
@@ -211,10 +243,10 @@
   border: 3px solid #b49aff25;
   border-top-color: #b49aff;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: dashboard-spin 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes dashboard-spin {
   to {
     transform: rotate(360deg);
   }
@@ -230,23 +262,152 @@
   .dashboard-page {
     padding: 24px 16px;
   }
+
   .dashboard-hero {
     align-items: flex-start;
     flex-direction: column;
   }
+
   .application-card {
     flex-wrap: wrap;
   }
-  .application-actions,
-  .edit-button {
+
+  .application-actions {
     width: 100%;
   }
+
+  .application-actions > * {
+    flex: 1;
+  }
+
   .applications-section {
     padding: 14px;
   }
+
   .statistic-card {
     padding: 12px;
     gap: 8px;
+  }
+}
+
+.application-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.application-filters input,
+.application-filters select {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #ffffff20;
+  border-radius: 10px;
+  background: #252130;
+  color: #f5f3ff;
+  font: inherit;
+}
+
+.application-filters input {
+  flex: 1 1 240px;
+}
+
+.application-filters select {
+  flex: 0 1 180px;
+}
+
+.application-filters input:focus,
+.application-filters select:focus {
+  outline: 2px solid #b49aff;
+  outline-offset: 2px;
+}
+
+.application-filters .status-select {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.application-filters .status-select.pending {
+  color: #fcd34d;
+}
+
+.application-filters .status-select.interview {
+  color: #93c5fd;
+}
+
+.application-filters .status-select.accepted {
+  color: #6ee7b7;
+}
+
+.application-filters .status-select.rejected {
+  color: #fda4af;
+}
+
+.status-select option {
+  background: #252130;
+  color: #f5f3ff;
+}
+
+.status-select option {
+  background: #252130;
+  color: #f5f3ff;
+  font-size: 14px;
+}
+
+.status-select option[value="pending"] {
+  color: #fcd34d;
+}
+
+.status-select option[value="interview"] {
+  color: #93c5fd;
+}
+
+.status-select option[value="accepted"] {
+  color: #6ee7b7;
+}
+
+.status-select option[value="rejected"] {
+  color: #fda4af;
+}
+
+.dashboard-page .application-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.dashboard-page .application-actions > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 90px;
+  height: 42px;
+  margin: 0;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1;
+}
+
+@media (max-width: 600px) {
+  .dashboard-page .application-actions {
+    width: 100%;
+  }
+
+  .dashboard-page .application-actions > * {
+    flex: 1;
+    min-width: 0;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .statistics-grid {
+    grid-template-columns: 1fr;
   }
 }
 

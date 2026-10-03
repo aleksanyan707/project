@@ -30,11 +30,7 @@
   height: 43px;
   place-items: center;
   border-radius: 13px;
-  background: linear-gradient(
-    135deg,
-    #9f7aea,
-    #6d28d9
-  );
+  background: linear-gradient(135deg, #9f7aea, #6d28d9);
   box-shadow: 0 8px 22px rgba(109, 40, 217, 0.35);
 }
 
@@ -77,11 +73,7 @@
 
 .nav-link.active {
   color: #ffffff;
-  background: linear-gradient(
-    135deg,
-    #716779,
-    #7c3aed
-  );
+  background: linear-gradient(135deg, #716779, #7c3aed);
 }
 
 @media (max-width: 600px) {
@@ -102,4 +94,19 @@
     width: 21px;
     height: 21px;
   }
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-link::before {
+  content: "";
+  display: block;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  background: url("../../assets/Photos/nextStepLogo.png") center / contain no-repeat;
 }

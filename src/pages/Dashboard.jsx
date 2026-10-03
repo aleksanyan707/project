@@ -1,30 +1,36 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  BriefcaseBusiness,
-  Clock3,
-  CalendarDays,
-  CheckCircle2,
-  XCircle,
-  Building2,
-  MapPin,
-  Plus,
-} from "lucide-react";
+import DeleteModal from "../components/DeleteModal/DeleteModal";
+import StatusDropdown from "../components/StatusDropdown/StatusDropdown";
 
-import { fetchApplications } from "../store/applicationActions";
+import {
+  fetchApplications,
+  deleteApplication,
+  setApplicationSearch,
+} from "../store/applicationActions";
 
 import "./Dashboard.css";
+
+const getStatus = (application) => {
+  return application.status?.toLowerCase() || "pending";
+};
 
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   const {
-    items = [],
+    items,
     loading,
     error,
+    search = "",
+    statusFilter = "all",
   } = useSelector((state) => state.applications);
+
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     dispatch(fetchApplications());
@@ -32,37 +38,78 @@ const Dashboard = () => {
 
   const applications = Array.isArray(items) ? items : [];
 
-  const pendingCount = applications.filter(
-    (application) => application.status?.toLowerCase() === "pending",
-  ).length;
+  const filteredApplications = applications.filter((application) => {
+    const query = search.trim().toLowerCase();
 
-  const interviewCount = applications.filter(
-    (application) => application.status?.toLowerCase() === "interview",
-  ).length;
+    const matchesSearch =
+      `${application.position || ""} ${application.company || ""}`
+        .toLowerCase()
+        .includes(query);
 
-  const acceptedCount = applications.filter(
-    (application) => application.status?.toLowerCase() === "accepted",
-  ).length;
+    const matchesStatus =
+      statusFilter === "all" || getStatus(application) === statusFilter;
 
-  const rejectedCount = applications.filter(
-    (application) => application.status?.toLowerCase() === "rejected",
-  ).length;
+    return matchesSearch && matchesStatus;
+  });
+
+  const statistics = [
+    {
+      label: "Total",
+      status: "total",
+      count: applications.length,
+    },
+    ...["pending", "interview", "accepted", "rejected"].map((status) => ({
+      label: status.charAt(0).toUpperCase() + status.slice(1),
+      status,
+      count: applications.filter(
+        (application) => getStatus(application) === status,
+      ).length,
+    })),
+  ];
+
+  const openDeleteModal = (application) => {
+    setDeleteError("");
+    setSelectedApplication(application);
+  };
+
+  const closeDeleteModal = () => {
+    if (deleting) return;
+
+    setSelectedApplication(null);
+    setDeleteError("");
+  };
+
+  const handleDelete = async () => {
+    if (!selectedApplication || deleting) return;
+
+    setDeleting(true);
+    setDeleteError("");
+
+    try {
+      await dispatch(deleteApplication(selectedApplication.id));
+      setSelectedApplication(null);
+    } catch (error) {
+      setDeleteError(error.message || "Failed to delete application");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (loading) {
     return (
-      <main className="dashboard-page">
-        <div className="dashboard-message">
-          <div className="loading-circle"></div>
+      <section className="dashboard-page">
+        <div className="dashboard-message" role="status">
+          <div className="loading-circle" aria-hidden="true" />
           <p>Loading applications...</p>
         </div>
-      </main>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <main className="dashboard-page">
-        <div className="dashboard-message error">
+      <section className="dashboard-page">
+        <div className="dashboard-message error" role="alert">
           <h2>Something went wrong</h2>
           <p>{error}</p>
 
@@ -70,16 +117,15 @@ const Dashboard = () => {
             Try again
           </button>
         </div>
-      </main>
+      </section>
     );
   }
 
   return (
-    <main className="dashboard-page">
+    <section className="dashboard-page">
       <section className="dashboard-hero">
         <div>
           <p className="page-label">Application manager</p>
-
           <h1>Dashboard</h1>
 
           <p className="dashboard-description">
@@ -89,66 +135,19 @@ const Dashboard = () => {
         </div>
 
         <Link to="/add" className="add-button">
-          <Plus size={19} />
           Add application
         </Link>
       </section>
 
       <section className="statistics-grid">
-        <article className="statistic-card total">
-          <div className="statistic-icon">
-            <BriefcaseBusiness size={23} />
-          </div>
-
-          <div>
-            <span>Total</span>
-            <strong>{applications.length}</strong>
-          </div>
-        </article>
-
-        <article className="statistic-card pending">
-          <div className="statistic-icon">
-            <Clock3 size={23} />
-          </div>
-
-          <div>
-            <span>Pending</span>
-            <strong>{pendingCount}</strong>
-          </div>
-        </article>
-
-        <article className="statistic-card interview">
-          <div className="statistic-icon">
-            <CalendarDays size={23} />
-          </div>
-
-          <div>
-            <span>Interview</span>
-            <strong>{interviewCount}</strong>
-          </div>
-        </article>
-
-        <article className="statistic-card accepted">
-          <div className="statistic-icon">
-            <CheckCircle2 size={23} />
-          </div>
-
-          <div>
-            <span>Accepted</span>
-            <strong>{acceptedCount}</strong>
-          </div>
-        </article>
-
-        <article className="statistic-card rejected">
-          <div className="statistic-icon">
-            <XCircle size={23} />
-          </div>
-
-          <div>
-            <span>Rejected</span>
-            <strong>{rejectedCount}</strong>
-          </div>
-        </article>
+        {statistics.map(({ label, status, count }) => (
+          <article className={`statistic-card ${status}`} key={status}>
+            <div>
+              <span>{label}</span>
+              <strong>{count}</strong>
+            </div>
+          </article>
+        ))}
       </section>
 
       <section className="applications-section">
@@ -161,12 +160,22 @@ const Dashboard = () => {
           <span className="application-count">{applications.length} total</span>
         </div>
 
+        <div className="application-filters">
+          <input
+            type="search"
+            aria-label="Search applications"
+            placeholder="Search by position or company..."
+            value={search}
+            onChange={(event) =>
+              dispatch(setApplicationSearch(event.target.value))
+            }
+          />
+
+          <StatusDropdown />
+        </div>
+
         {applications.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">
-              <BriefcaseBusiness size={30} />
-            </div>
-
             <h3>No applications yet</h3>
 
             <p>
@@ -174,21 +183,20 @@ const Dashboard = () => {
             </p>
 
             <Link to="/add" className="empty-button">
-              <Plus size={18} />
               Add first application
             </Link>
           </div>
+        ) : filteredApplications.length === 0 ? (
+          <div className="empty-state" role="status">
+            <p>No applications match your search.</p>
+          </div>
         ) : (
           <div className="applications-list">
-            {applications.map((application) => {
-              const status = application.status?.toLowerCase() || "pending";
+            {filteredApplications.map((application) => {
+              const status = getStatus(application);
 
               return (
                 <article className="application-card" key={application.id}>
-                  <div className="company-icon">
-                    <Building2 size={25} />
-                  </div>
-
                   <div className="application-information">
                     <div className="application-title">
                       <div>
@@ -196,23 +204,15 @@ const Dashboard = () => {
 
                         <p>{application.company || "Unknown company"}</p>
                       </div>
-
-                      <span className={`status-badge ${status}`}>{status}</span>
                     </div>
 
                     <div className="application-details">
                       {application.location && (
-                        <span>
-                          <MapPin size={16} />
-                          {application.location}
-                        </span>
+                        <span>{application.location}</span>
                       )}
 
                       {application.appliedDate && (
-                        <span>
-                          <CalendarDays size={16} />
-                          {application.appliedDate}
-                        </span>
+                        <span>{application.appliedDate}</span>
                       )}
 
                       {application.salaryExpectation && (
@@ -224,12 +224,22 @@ const Dashboard = () => {
                   </div>
 
                   <div className="application-actions">
+                    <span className={`status-badge ${status}`}>{status}</span>
+
                     <Link
                       to={`/edit/${application.id}`}
                       className="edit-button"
                     >
                       Edit
                     </Link>
+
+                    <button
+                      type="button"
+                      className="delete-button"
+                      onClick={() => openDeleteModal(application)}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </article>
               );
@@ -237,7 +247,17 @@ const Dashboard = () => {
           </div>
         )}
       </section>
-    </main>
+
+      {selectedApplication && (
+        <DeleteModal
+          application={selectedApplication}
+          onClose={closeDeleteModal}
+          onConfirm={handleDelete}
+          deleting={deleting}
+          error={deleteError}
+        />
+      )}
+    </section>
   );
 };
 

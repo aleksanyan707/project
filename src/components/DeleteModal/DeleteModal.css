@@ -1,0 +1,74 @@
+.delete-modal {
+  width: min(440px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 28px;
+  overflow-y: auto;
+  border: 1px solid #ffffff18;
+  border-radius: 20px;
+  background: #252130;
+  color: #f5f3ff;
+  font-family: "Segoe UI", sans-serif;
+  box-shadow: 0 20px 70px #00000060;
+}
+
+.delete-modal::backdrop {
+  background: #00000090;
+}
+
+.delete-modal h2 {
+  margin: 0 0 14px;
+  font-size: 24px;
+}
+
+.delete-modal p {
+  margin: 0;
+  color: #b9b2cb;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.delete-modal strong {
+  color: #f5f3ff;
+}
+
+.delete-modal .modal-error {
+  margin-top: 16px;
+  color: #fda4af;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.modal-actions button {
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-cancel {
+  background: #ffffff0d;
+  color: #e2dcef;
+}
+
+.modal-delete {
+  background: #fb7185;
+  color: #301019;
+}
+
+.modal-actions button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.modal-actions button:focus-visible {
+  outline: 2px solid #c4b5fd;
+  outline-offset: 3px;
+}

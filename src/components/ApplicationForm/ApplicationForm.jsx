@@ -2,6 +2,8 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 
 import { useEffect, useRef } from "react";
 
+import FormStatusDropdown from "../FormStatusDropdown/FormStatusDropdown";
+
 import * as Yup from "yup";
 
 import "./ApplicationForm.css";
@@ -15,6 +17,7 @@ export const emptyApplication = {
   salaryExpectation: "",
   experience: "",
   location: "",
+  status: "pending",
   cvUrl: "",
   coverLetter: "",
 };
@@ -42,6 +45,10 @@ const validationSchema = Yup.object({
     .typeError("Experience must be a number")
     .min(0, "Experience cannot be negative")
     .required("Experience is required"),
+
+  status: Yup.string()
+    .oneOf(["pending", "interview", "accepted", "rejected"])
+    .required("Status is required"),
 
   location: Yup.string().trim(),
 
@@ -80,6 +87,10 @@ const ApplicationForm = ({
       {({ values, isSubmitting }) => (
         <Form className="application-form">
           <div className="form-grid">
+            <FormStatusDropdown
+              name="status"
+              disabled={saving || isSubmitting}
+            />
             <div className="form-field">
               <label htmlFor="fullName">Full Name *</label>
 

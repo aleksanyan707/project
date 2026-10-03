@@ -1,0 +1,101 @@
+.status-dropdown {
+  position: relative;
+  flex: 0 1 200px;
+  min-width: 180px;
+}
+
+.status-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid #ffffff20;
+  border-radius: 12px;
+  background: #252130;
+  color: #f5f3ff;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.status-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.status-trigger.pending {
+  color: #fcd34d;
+}
+
+.status-trigger.interview {
+  color: #93c5fd;
+}
+
+.status-trigger.accepted {
+  color: #6ee7b7;
+}
+
+.status-trigger.rejected {
+  color: #fda4af;
+}
+
+.dropdown-arrow {
+  color: #bca4ff;
+  transition: transform 0.2s;
+}
+
+.status-dropdown[open] .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.status-dropdown[open] .status-trigger {
+  border-color: #b49aff;
+}
+
+.status-options {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ffffff20;
+  border-radius: 14px;
+  background: #252130;
+  box-shadow: 0 12px 35px #00000050;
+}
+
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #d9d3e8;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.status-option:hover {
+  background: #ffffff0a;
+}
+
+.status-option.selected {
+  background: #b49aff20;
+  color: #e2d5ff;
+}
+
+.option-check {
+  margin-left: auto;
+  color: #b49aff;
+}
+
+.status-trigger:focus-visible,
+.status-option:focus-visible {
+  outline: 2px solid #b49aff;
+  outline-offset: 2px;
+}

@@ -130,3 +130,19 @@
     width: 100%;
   }
 }
+
+.form-field select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #d8d1df;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #29222f;
+  font: inherit;
+}
+
+.form-field select:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 4px #7c3aed1a;
+}

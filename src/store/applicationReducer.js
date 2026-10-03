@@ -5,6 +5,10 @@ import {
   CREATE_APPLICATION_REQUEST,
   CREATE_APPLICATION_SUCCESS,
   CREATE_APPLICATION_FAILURE,
+  SET_APPLICATION_SEARCH,
+  SET_APPLICATION_FILTER,
+  UPDATE_APPLICATION_SUCCESS,
+  DELETE_APPLICATION_SUCCESS,
 } from "./actionTypes";
 
 const initialState = {
@@ -12,6 +16,8 @@ const initialState = {
   loading: false,
   saving: false,
   error: null,
+  search: "",
+  statusFilter: "all",
 };
 
 const applicationReducer = (state = initialState, action) => {
@@ -56,6 +62,36 @@ const applicationReducer = (state = initialState, action) => {
         ...state,
         saving: false,
         error: action.payload,
+      };
+
+    case SET_APPLICATION_SEARCH:
+      return {
+        ...state,
+        search: action.payload,
+      };
+
+    case SET_APPLICATION_FILTER:
+      return {
+        ...state,
+        statusFilter: action.payload,
+      };
+
+    case UPDATE_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        items: state.items.map((application) =>
+          String(application.id) === String(action.payload.id)
+            ? action.payload
+            : application,
+        ),
+      };
+
+    case DELETE_APPLICATION_SUCCESS:
+      return {
+        ...state,
+        items: state.items.filter(
+          (application) => String(application.id) !== String(action.payload),
+        ),
       };
 
     default:

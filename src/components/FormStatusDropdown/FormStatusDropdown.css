@@ -1,0 +1,89 @@
+.form-status-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.form-status-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border: 1px solid #d8d1df;
+  border-radius: 11px;
+  background: #ffffff;
+  color: #29222f;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.form-status-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.form-status-dropdown[open] .form-status-trigger {
+  border-color: #7c3aed;
+}
+
+.form-status-arrow {
+  color: #7c3aed;
+  transition: transform 0.2s;
+}
+
+.form-status-dropdown[open] .form-status-arrow {
+  transform: rotate(180deg);
+}
+
+.form-status-options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #e4ddeb;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px #29222f20;
+}
+
+.form-status-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #3c3344;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.form-status-option:hover {
+  background: #f4effa;
+}
+
+.form-status-option.selected {
+  background: #ede5fb;
+  color: #6d28d9;
+}
+
+.form-status-check {
+  margin-left: auto;
+  color: #7c3aed;
+}
+
+.form-status-trigger:focus-visible,
+.form-status-option:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 2px;
+}
+
+.form-status-trigger[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

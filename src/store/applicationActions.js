@@ -7,6 +7,8 @@ import {
   CREATE_APPLICATION_REQUEST,
   CREATE_APPLICATION_SUCCESS,
   CREATE_APPLICATION_FAILURE,
+  SET_APPLICATION_SEARCH,
+  SET_APPLICATION_FILTER,
   UPDATE_APPLICATION_SUCCESS,
   DELETE_APPLICATION_SUCCESS,
 } from "./actionTypes";
@@ -61,12 +63,22 @@ export const createApplication = (applicationData) => {
   };
 };
 
+export const setApplicationSearch = (value) => ({
+  type: SET_APPLICATION_SEARCH,
+  payload: value,
+});
+
+export const setApplicationFilter = (value) => ({
+  type: SET_APPLICATION_FILTER,
+  payload: value,
+});
+
 export const updateApplication = (id, applicationData) => {
   return async (dispatch) => {
     try {
       const response = await axios.patch(
         `${API_URL}/${encodeURIComponent(id)}`,
-        applicationData
+        applicationData,
       );
 
       dispatch({
